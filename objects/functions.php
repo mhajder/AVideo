@@ -1382,7 +1382,23 @@ function getSources($fileName, $returnArray = false, $try = 0) {
             if ($path_parts['extension'] == "webm" || $path_parts['extension'] == "mp4" || $path_parts['extension'] == "m3u8" || $path_parts['extension'] == "mp3" || $path_parts['extension'] == "ogg") {
                 $obj = new stdClass();
                 $obj->type = mime_content_type_per_filename($value['path']);
-                $sources .= "<source src=\"{$value['url']}\" type=\"{$obj->type}\">";
+
+                $resolution = getResolutionFromFilename($value['filename']);
+                $resolution_label = "{$resolution}p ";
+                if($resolution == 720) {
+                    $resolution_label .= "<span class='label label-danger' style='padding: 0 2px; font-size: .8em; display: inline;'>HD</span>";
+                }
+                if($resolution == 1080) {
+                    $resolution_label .= "<span class='label label-danger' style='padding: 0 2px; font-size: .8em; display: inline;'>FHD</span>";
+                }
+                if($resolution == 2220) {
+                    $resolution_label .= "<span class='label label-danger' style='padding: 0 2px; font-size: .8em; display: inline;'>FHD+</span>";
+                }
+                if($resolution == 3840) {
+                    $resolution_label .= "<span class='label label-danger' style='padding: 0 2px; font-size: .8em; display: inline;'>4k</span>";
+                }
+
+                $sources .= "<source src=\"{$value['url']}\" type=\"{$obj->type}\" label=\"{$resolution_label}\" res=\"{$resolution}\">";
                 $obj->src = $value['url'];
                 $sourcesArray[] = $obj;
             }
